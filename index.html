@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Multiservizi | Infrastrutture e Sicurezza Stradale</title>
+    <!-- Font Preconnect & Import -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /*--------------------------------------------------------------
+        # RESET & VARIABILI GLOBALI
+        --------------------------------------------------------------*/
+        :root {
+            --bg-main: #121212;
+            --bg-sec: #1A1A1A;
+            --yellow-sign: #FFC107;
+            --white: #FFFFFF;
+            --red-emergency: #D62828;
+            --gray-text: #A0A0A0;
+            --font-main: 'Inter', sans-serif;
+            --transition-smooth: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            background-color: var(--bg-main);
+            font-family: var(--font-main);
+            color: var(--white);
+            overflow-x: hidden;
+        }
+
+        body {
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Linea Stradale Centrale Condivisa (Asse Narrativo) */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 100vh; /* Parte dopo la Hero */
+            bottom: 120px; /* Finisce prima del footer */
+            left: 50%;
+            width: 4px;
+            transform: translateX(-50%);
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 40px,
+                var(--yellow-sign) 40px,
+                var(--yellow-sign) 90px
+            );
+            z-index: 1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* Classi di Utility per Scroll Reveal */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: var(--transition-smooth);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /*--------------------------------------------------------------
+        # COMPONENTI NAVBAR (GLASSMORPHISM)
+        --------------------------------------------------------------*/
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 25px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: var(--transition-smooth);
+        }
+
+        header.scrolled {
+            padding: 15px 5%;
+            background: rgba(26, 26, 26, 0.75);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            font-weight: 900;
+            font-size: 1.5rem;
+            letter-spacing: -1px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--yellow-sign);
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        nav a:hover {
+            color: var(--yellow-sign);
+        }
+
+        /*--------------------------------------------------------------
+        # HERO SECTION (ANIMATED HIGHWAY EFFECT)
+        --------------------------------------------------------------*/
+        .hero {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 0 20px;
+            background: linear-gradient(rgba(18, 18, 18, 0.4), #121212), 
+                        url('https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?q=80&w=2069&auto=format&fit=crop') center/cover no-repeat;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 10;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            color: var(--gray-text);
+            font-size: 1.25rem;
+            margin-bottom: 40px;
+            font-weight: 400;
+        }
+
+        /* Pulsanti Premium */
+        .btn {
+            display: inline-block;
+            padding: 16px 36px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            margin: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--yellow-sign);
+            color: var(--bg-main);
+            box-shadow: 0 4px 20px rgba(255, 193, 7, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 193, 7, 0.5);
+        }
+
+        .btn-secondary {
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: var(--white);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--white);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        /* La prospettiva della strada dinamica sul fondo della Hero */
+        .hero-highway {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 150px;
+            background: #1a1a1a;
+            clip-path: polygon(45% 0, 55% 0, 100% 100%, 0 100%);
+            opacity: 0.8;
+        }
+
+        .hero-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 6px;
+            height: 100%;
+            transform: translateX(-50%);
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 15px,
+                var(--yellow-sign) 15px,
+                var(--yellow-sign) 35px
+            );
+            animation: highwayDrive 0.6s linear infinite;
+        }
+
+        @keyframes highwayDrive {
+            0% { background-position-y: 0px; }
+            100% { background-position-y: 50px; }
+        }
+
+        /*--------------------------------------------------------------
+        # PROVA SOCIALE (COUNTER ANIMATI)
+        --------------------------------------------------------------*/
+        .social-proof {
+            padding: 80px 5%;
+            background: var(--bg-sec);
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 40px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--yellow-sign);
+            margin-bottom: 10px;
+            letter-spacing: -1px;
+        }
+
+        .stat-item p {
+            color: var(--gray-text);
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /*--------------------------------------------------------------
+        # CLIENTS LOGO SLIDER
+        --------------------------------------------------------------*/
+        .clients-section {
+            padding: 60px 0;
+            background: #161616;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+            overflow: hidden;
+        }
+
+        .slider-title {
+            text-align: center;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+        }
+
+        .marquee {
+            display: flex;
+            width: 200%;
+            animation: marqueeTrack 25s linear infinite;
+        }
+
+        .marquee-track {
+            display: flex;
+            justify-content: space-around;
+            width: 50%;
+        }
+
+        .client-logo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: rgba(255,255,255,0.25);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes marqueeTrack {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /*--------------------------------------------------------------
+        # SEZIONE SERVIZI (MODELLO USCITE AUTOSTRADALI)
+        --------------------------------------------------------------*/
+        .services-section {
+            padding: 140px 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 100px auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            letter-spacing: -1px;
+            margin-bottom: 20px;
+        }
+
+        .exits-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Struttura Alternata dei Cartelli di Uscita */
+        .exit-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 120px;
+            position: relative;
+            width: 100%;
+        }
+
+        .exit-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .exit-card-wrapper {
+            width: 45%;
+        }
+
+        /* Il Cartello Autostradale Retro-riflettente */
+        .highway-sign {
+            background: linear-gradient(135deg, #0b3c26, #062417); /* Verde Autostradale Tecnico */
+            border: 4px solid var(--white);
+            border-radius: 8px;
+            padding: 35px;
+            position: relative;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            transition: var(--transition-smooth);
+            cursor: pointer;
+        }
+
+        /* Effetto Rifrangente / Catarifrangente al passaggio */
+        .highway-sign::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(255,255,255,0.15) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .highway-sign:hover::before {
+            opacity: 1;
+        }
+
+        .highway-sign:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0, 255, 100, 0.1);
+        }
+
+        .sign-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px dashed rgba(255,255,255,0.2);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .exit-number {
+            font-size: 0.85rem;
+            font-weight: 900;
+            background: var(--white);
+            color: #062417;
+            padding: 4px 10px;
+            border-radius: 3px;
+            letter-spacing: 1px;
+        }
+
+        .sign-arrow {
+            width: 24px;
+            height: 24px;
+            fill: var(--white);
+        }
+
+        .exit-row:nth-child(even) .sign-arrow {
+            transform: scaleX(-1); /* Specchia la freccia per l'uscita a sinistra */
+        }
+
+        .highway-sign h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            letter-spacing: -0.5px;
+        }
+
+        .highway-sign p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Elemento Connettore Meccanico alla Linea Centrale */
+        .road-connector {
+            position: absolute;
+            top: 50%;
+            left: 45%;
+            width: 10%;
+            height: 2px;
+            border-top: 3px dotted var(--yellow-sign);
+            opacity: 0.4;
+            pointer-events: none;
+        }
+
+        .exit-row:nth-child(even) .road-connector {
+            left: auto;
+            right: 45%;
+        }
+
+        /*--------------------------------------------------------------
+        # SEZIONE FLOTTA / MEZZI
+        --------------------------------------------------------------*/
+        .fleet-section {
+            padding: 120px 5%;
+            background: var(--bg-sec);
+        }
+
+        .fleet-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .fleet-card {
+            background: var(--bg-main);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition-smooth);
+        }
+
+        .fleet-card:hover {
+            border-color: var(--yellow-sign);
+            transform: translateY(-5px);
+        }
+
+        .fleet-img {
+            width: 100%;
+            height: 240px;
+            background-size: cover;
+            background-position: center;
+            filter: grayscale(40%);
+            transition: filter 0.4s ease;
+        }
+
+        .fleet-card:hover .fleet-img {
+            filter: grayscale(0%);
+        }
+
+        .fleet-info {
+            padding: 25px;
+        }
+
+        .fleet-info h4 {
+            font-size: 1.25rem;
+            margin-bottom: 10px;
+        }
+
+        .fleet-info p {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /*--------------------------------------------------------------
+        # SEZIONE CERTIFICAZIONI
+        --------------------------------------------------------------*/
+        .certs-section {
+            padding: 100px 5%;
+            text-align: center;
+            background: #161616;
+        }
+
+        .certs-wrapper {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            flex-wrap: wrap;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .cert-badge {
+            background: var(--bg-main);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 30px;
+            border-radius: 4px;
+            width: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cert-badge svg {
+            width: 40px;
+            height: 40px;
+            fill: var(--yellow-sign);
+        }
+
+        .cert-badge span {
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /*--------------------------------------------------------------
+        # SEZIONE PERCORSO (TIMELINE VERTICALE ATTIVA)
+        --------------------------------------------------------------*/
+        .timeline-section {
+            padding: 140px 5%;
+            position: relative;
+        }
+
+        .timeline-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .timeline-node {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 55%;
+            margin-bottom: 90px;
+            position: relative;
+        }
+
+        .timeline-node:nth-child(even) {
+            justify-content: flex-start;
+            padding-right: 0;
+            padding-left: 55%;
+        }
+
+        /* Indicatore Catarifrangente sulla Linea */
+        .node-dot {
+            position: absolute;
+            left: 50%;
+            top: 10px;
+            transform: translateX(-50%);
+            width: 16px;
+            height: 16px;
+            background: #222;
+            border: 4px solid var(--yellow-sign);
+            border-radius: 50%;
+            z-index: 5;
+            transition: background 0.3s ease;
+        }
+
+        .timeline-node.active .node-dot {
+            background: var(--white);
+            box-shadow: 0 0 15px var(--yellow-sign);
+        }
+
+        .node-box {
+            background: var(--bg-sec);
+            padding: 30px;
+            border-radius: 4px;
+            border-left: 3px solid var(--yellow-sign);
+            transition: var(--transition-smooth);
+        }
+
+        .timeline-node:nth-child(even) .node-box {
+            border-left: none;
+            border-right: 3px solid var(--yellow-sign);
+        }
+
+        .node-box h4 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--white);
+        }
+
+        .node-box p {
+            color: var(--gray-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /*--------------------------------------------------------------
+        # SEZIONE MAPPA / COPERTURA
+        --------------------------------------------------------------*/
+        .map-section {
+            padding: 120px 5%;
+            background: var(--bg-sec);
+            text-align: center;
+        }
+
+        .map-container {
+            max-width: 900px;
+            margin: 40px auto 0 auto;
+            position: relative;
+            background: rgba(0,0,0,0.2);
+            padding: 60px;
+            border-radius: 8px;
+            border: 1px solid rgba(255,255,255,0.02);
+        }
+
+        /* Simulazione Mappa Geografica Dark */
+        .map-mockup {
+            width: 100%;
+            height: 350px;
+            background: radial-gradient(rgba(255, 193, 7, 0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+            position: relative;
+        }
+
+        .map-hub {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: var(--yellow-sign);
+            border-radius: 50%;
+        }
+
+        .hub-1 { top: 40%; left: 45%; }
+        .hub-2 { top: 55%; left: 50%; }
+        .hub-3 { top: 30%; left: 52%; }
+
+        .map-hub::after {
+            content: '';
+            position: absolute;
+            inset: -10px;
+            border: 2px solid var(--yellow-sign);
+            border-radius: 50%;
+            animation: pulseMap 2s infinite ease-out;
+        }
+
+        @keyframes pulseMap {
+            0% { transform: scale(0.5); opacity: 1; }
+            100% { transform: scale(2.5); opacity: 0; }
+        }
+
+        /*--------------------------------------------------------------
+        # CTA FINALE (CARTELLO TRIANGOLARE STRADALE)
+        --------------------------------------------------------------*/
+        .cta-section {
+            padding: 140px 5%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .sign-triangle {
+            position: relative;
+            width: 500px;
+            height: 450px;
+            background: #1a1a1a;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            align-items: center;
+            padding-bottom: 60px;
+            box-shadow: inset 0 0 0 15px var(--red-emergency); /* Bordo di pericolo rosso */
+            border-bottom: 4px solid var(--red-emergency);
+        }
+
+        /* Illuminazione ed effetto Glow del Cartello */
+        .sign-triangle::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            box-shadow: inset 0 0 60px rgba(214, 40, 40, 0.4);
+            pointer-events: none;
+        }
+
+        .triangle-content {
+            z-index: 10;
+            text-align: center;
+            width: 70%;
+            margin: 0 auto;
+        }
+
+        .triangle-content h2 {
+            font-size: 2rem;
+            font-weight: 900;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .triangle-content .btn {
+            margin: 0;
+            background: var(--white);
+            color: var(--bg-main);
+        }
+
+        .triangle-content .btn:hover {
+            background: var(--yellow-sign);
+            box-shadow: 0 0 25px rgba(255,193,7,0.4);
+        }
+
+        /*--------------------------------------------------------------
+        # FOOTER (FINE PERCORSO)
+        --------------------------------------------------------------*/
+        footer {
+            background: #0d0d0d;
+            padding: 80px 5% 40px 5%;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            position: relative;
+        }
+
+        .end-road-sign {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--bg-main);
+            border: 2px solid var(--white);
+            padding: 8px 24px;
+            border-radius: 0;
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Sbarra nera diagonale sul cartello fine percorso */
+        .end-road-sign::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 0; width: 100%; height: 3px;
+            background: var(--red-emergency);
+            transform: translateY(-50%) rotate(-15deg);
+        }
+
+        .footer-grid {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 50px;
+        }
+
+        .footer-brand h4 {
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 15px;
+        }
+
+        .footer-brand p {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .footer-links h5 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            color: var(--yellow-sign);
+        }
+
+        .footer-links ul {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--gray-text);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 60px auto 0 auto;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.3);
+        }
+
+        /*--------------------------------------------------------------
+        # RESPONSIVE ADAPTATION (MEDIA QUERIES)
+        --------------------------------------------------------------*/
+        @media (max-width: 992px) {
+            .hero h1 { font-size: 3rem; }
+            .exit-row, .exit-row:nth-child(even) { flex-direction: column; margin-bottom: 60px; }
+            .exit-card-wrapper { width: 100%; }
+            .road-connector { display: none; }
+            body::before { left: 20px; transform: none; }
+            .timeline-node, .timeline-node:nth-child(even) { justify-content: flex-start; padding-left: 50px; padding-right: 0; }
+            .node-dot { left: 20px; }
+            .timeline-node:nth-child(even) .node-box { border-right: none; border-left: 3px solid var(--yellow-sign); }
+            header { padding: 20px 20px; }
+            nav { display: none; } /* Implementabile menu burger se richiesto */
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 { font-size: 2.2rem; }
+            .sign-triangle { width: 100%; height: auto; aspect-ratio: 1/1; padding-bottom: 30px; }
+            .triangle-content h2 { font-size: 1.3rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- # HEADER -->
+    <header id="main-header">
+        <div class="logo">Car <span>Multiservizi</span></div>
+        <nav>
+            <a href="#servizi">Servizi</a>
+            <a href="#flotta">Flotta</a>
+            <a href="#percorso">Il Percorso</a>
+            <a href="#copertura">Territorio</a>
+            <a href="#contatti" class="btn-secondary" style="padding: 8px 16px; margin:0; font-size:0.8rem;">Contatti</a>
+        </nav>
+    </header>
+
+    <!-- # HERO SECTION -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Sicurezza e Servizi per le<br>Infrastrutture Stradali</h1>
+            <p>Interventi professionali ad alto impatto operativo per enti pubblici e aziende private.</p>
+            <a href="#contatti" class="btn btn-primary">Richiedi Preventivo</a>
+            <a href="#servizi" class="btn btn-secondary">Scopri i Servizi</a>
+        </div>
+        <div class="hero-highway">
+            <div class="hero-line"></div>
+        </div>
+    </section>
+
+    <!-- # SOCIAL PROOF SECTION -->
+    <section class="social-proof">
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3 class="counter" data-target="25">0</h3>
+                <p>Anni di Esperienza</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="1450">0</h3>
+                <p>Interventi Eseguiti</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="8200">0</h3>
+                <p>Km Segnaletica Posata</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="counter" data-target="120">0</h3>
+                <p>Enti Pubblici Serviti</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- # CLIENTS MARQUEE SLIDER -->
+    <section class="clients-section">
+        <div class="slider-title">Partner Istituzionali e Imprese Consorziate</div>
+        <div class="marquee">
+            <div class="marquee-track">
+                <div class="client-logo">Regione Toscana</div>
+                <div class="client-logo">Comune di Firenze</div>
+                <div class="client-logo">Anas S.p.A.</div>
+                <div class="client-logo">Provincia Autonoma</div>
+                <div class="client-logo">Autostrade per l'Italia</div>
+            </div>
+            <div class="marquee-track">
+                <div class="client-logo">Regione Toscana</div>
+                <div class="client-logo">Comune di Firenze</div>
+                <div class="client-logo">Anas S.p.A.</div>
+                <div class="client-logo">Provincia Autonoma</div>
+                <div class="client-logo">Autostrade per l'Italia</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- # SERVIZI (HIGHWAY EXITS PATTERN) -->
+    <section id="servizi" class="services-section">
+        <div class="section-header reveal">
+            <h2>Uscite Operative</h2>
+            <p>Nessun compromesso. Ogni divisione di Car Multiservizi è ingegnerizzata per rispondere a standard di sicurezza ministeriali europei.</p>
+        </div>
+
+        <div class="exits-container">
+            <!-- Uscita 1 -->
+            <div class="exit-row reveal">
+                <div class="exit-card-wrapper">
+                    <div class="highway-sign">
+                        <div class="sign-header">
+                            <span class="exit-number">USCITA 01</span>
+                            <svg class="sign-arrow" viewBox="0 0 24 24"><path d="M5 4v2h10.59L3 18.59 4.41 20 17 7.41V18h2V4H5z"/></svg>
+                        </div>
+                        <h3>Segnaletica Stradale</h3>
+                        <p>Realizzazione e posa in opera di segnaletica orizzontale ad alta rifrangenza, segnaletica verticale omologata e sistemi di informazione luminosa variabili.</p>
+                    </div>
+                </div>
+                <div class="road-connector"></div>
+            </div>
+
+            <!-- Uscita 2 -->
+            <div class="exit-row reveal">
+                <div class="exit-card-wrapper">
+                    <div class="highway-sign">
+                        <div class="sign-header">
+                            <span class="exit-number">USCITA 02</span>
+                            <svg class="sign-arrow" viewBox="0 0 24 24"><path d="M5 4v2h10.59L3 18.59 4.41 20 17 7.41V18h2V4H5z"/></svg>
+                        </div>
+                        <h3>Sicurezza Cantieri</h3>
+                        <p>Progettazione e allestimento completo di cantieri stradali urbani ed autostradali. Fornitura di barriere di sicurezza, attenuatori d'urto e layout di deviazione del flusso viario.</p>
+                    </div>
+                </div>
+                <div class="road-connector"></div>
+            </div>
+
+            <!-- Uscita 3 -->
+            <div class="exit-row reveal">
+                <div class="exit-card-wrapper">
+                    <div class="highway-sign">
+                        <div class="sign-header">
+                            <span class="exit-number">USCITA 03</span>
+                            <svg class="sign-arrow" viewBox="0 0 24 24"><path d="M5 4v2h10.59L3 18.59 4.41 20 17 7.41V18h2V4H5z"/></svg>
+                        </div>
+                        <h3>Manutenzione Stradale</h3>
+                        <p>Ripristino del manto stradale, fresatura asfalti, riparazione buche ed eliminazione di dissesti superficiali con l'utilizzo di conglomerati bituminosi di ultima generazione.</p>
+                    </div>
+                </div>
+                <div class="road-connector"></div>
+            </div>
+
+            <!-- Uscita 4 -->
+            <div class="exit-row reveal">
+                <div class="exit-card-wrapper">
+                    <div class="highway-sign" style="background: linear-gradient(135deg, #4a1212, #240606); border-color: var(--red-emergency);">
+                        <div class="sign-header">
+                            <span class="exit-number" style="background: var(--red-emergency); color: white;">SOS 04</span>
+                            <svg class="sign-arrow" viewBox="0 0 24 24"><path d="M5 4v2h10.59L3 18.59 4.41 20 17 7.41V18h2V4H5z"/></svg>
+                        </div>
+                        <h3>Pronto Intervento H24</h3>
+                        <p>Messa in sicurezza post-incidente, bonifica immediata della carreggiata, gestione detriti e ripristino delle condizioni di viabilità originarie in tempi record.</p>
+                    </div>
+                </div>
+                <div class="road-connector"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- # SEZIONE MEZZI E ATTREZZATURE -->
+    <section id="flotta" class="fleet-section">
+        <div class="section-header reveal">
+            <h2>Capacità Operativa Reale</h2>
+            <p>La nostra flotta proprietaria garantisce indipendenza logistica e velocità di dispiegamento su qualsiasi scenario infrastrutturale.</p>
+        </div>
+        <div class="fleet-grid">
+            <div class="fleet-card reveal">
+                <div class="fleet-img" style="background-image: url('https://images.unsplash.com/photo-1579532561814-a44ee603a19a?q=80&w=600&auto=format&fit=crop');"></div>
+                <div class="fleet-info">
+                    <h4>Tracciatrici ad Alta Pressione</h4>
+                    <p>Sistemi integrati per l'applicazione millimetrica di vernici acriliche e termoplastiche rifrangenti.</p>
+                </div>
+            </div>
+            <div class="fleet-card reveal">
+                <div class="fleet-img" style="background-image: url('https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?q=80&w=600&auto=format&fit=crop');"></div>
+                <div class="fleet-info">
+                    <h4>Mezzi di Protezione Attiva</h4>
+                    <p>Autocarri dotati di attenuatori d'urto posteriori TMA e pannelli a messaggio variabile mobili.</p>
+                </div>
+            </div>
+            <div class="fleet-card reveal">
+                <div class="fleet-img" style="background-image: url('https://images.unsplash.com/photo-1532601224476-15c79f2f7a51?q=80&w=600&auto=format&fit=crop');"></div>
+                <div class="fleet-info">
+                    <h4>Officine Mobili di Urgenza</h4>
+                    <p>Unità furgonate attrezzate per la posa immediata e il contenimento dei rischi ambientali.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- # CERTIFICAZIONI -->
+    <section class="certs-section">
+        <div class="certs-wrapper">
+            <div class="cert-badge reveal">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <span>SOA OG3 / OS10</span>
+            </div>
+            <div class="cert-badge reveal">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <span>ISO 9001:2015</span>
+            </div>
+            <div class="cert-badge reveal">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+                <span>ISO 45001:2018</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- # IL NOSTRO PERCORSO (TIMELINE STRADALE VERTICALE) -->
+    <section id="percorso" class="timeline-section">
+        <div class="section-header reveal">
+            <h2>I Nostri Valori Guida</h2>
+            <p>Le pietre miliari che determinano la qualità geometrica e strutturale di ogni nostro cantiere.</p>
+        </div>
+
+        <div class="timeline-container">
+            <div class="timeline-node reveal">
+                <div class="node-dot"></div>
+                <div class="node-box">
+                    <h4>Esperienza</h4>
+                    <p>Oltre due decenni di pianificazione logistica e interfaccia diretta con uffici tecnici comunali e provinciali.</p>
+                </div>
+            </div>
+
+            <div class="timeline-node reveal">
+                <div class="node-dot"></div>
+                <div class="node-box">
+                    <h4>Professionalità</h4>
+                    <p>Maestranze formate e aggiornate secondo il D.M. 22 Gennaio 2019 relativo alla segnaletica di cantiere in presenza di traffico.</p>
+                </div>
+            </div>
+
+            <div class="timeline-node reveal">
+                <div class="node-dot"></div>
+                <div class="node-box">
+                    <h4>Sicurezza</h4>
+                    <p>Standard rigorosi focalizzati sul contenimento del rischio sia per gli operatori in corsia sia per gli utenti in transito.</p>
+                </div>
+            </div>
+
+            <div class="timeline-node reveal">
+                <div class="node-dot"></div>
+                <div class="node-box">
+                    <h4>Affidabilità</h4>
+                    <p>Rispetto vincolante dei cronoprogrammi concordati per evitare penali da ritardo e massimizzare l'indice di fluidità viaria.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- # COPERTURA TERRITORIALE -->
+    <section id="copertura" class="map-section">
+        <div class="section-header reveal">
+            <h2>Presidio Logistico Strategico</h2>
+            <p>Centri di stoccaggio e coordinamento dislocati per garantire l'apertura cantieri entro le tempistiche contrattuali stabilite.</p>
+        </div>
+        <div class="map-container reveal">
+            <div class="map-mockup">
+                <div class="map-hub hub-1"></div>
+                <div class="map-hub hub-2"></div>
+                <div class="map-hub hub-3"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- # CTA FINALE (CARTELLO TRIANGOLARE DI PERCOLO) -->
+    <section id="contatti" class="cta-section">
+        <div class="sign-triangle reveal">
+            <div class="triangle-content">
+                <h2>Richiedi un Intervento o Preventivo</h2>
+                <a href="mailto:info@carmultiservizi.it" class="btn">Invia Capitolato</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- # FOOTER -->
+    <footer>
+        <div class="end-road-sign">Fine Percorso</div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h4>Car Multiservizi</h4>
+                <p>Infrastrutture, manutenzioni e sicurezza su strada. Partner d'eccellenza per enti pubblici e general contractor.</p>
+            </div>
+            <div class="footer-links">
+                <h5>Contatti Operativi</h5>
+                <ul>
+                    <li>Tel: +39 055 1234567</li>
+                    <li>Sede Legale: Via delle Cave, 42 - Firenze</li>
+                    <li>Email: info@carmultiservizi.it</li>
+                </ul>
+            </div>
+            <div class="footer-links">
+                <h5>Legali</h5>
+                <ul>
+                    <li>P.IVA 01234567890</li>
+                    <li><a href="#">Privacy & Cookie Policy</a></li>
+                    <li><a href="#">Note Legali</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Car Multiservizi. All Rights Reserved.</p>
+            <p>Designed with Infrastructure Logic Architecture</p>
+        </div>
+    </footer>
+
+    <!-- # JAVASCRIPT VANILLA -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. GESTIONE SCROLL HEADER (GLASSMORPHISM EFFECT)
+            const header = document.getElementById('main-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.add('scrolled');
+                }
+            });
+
+            // 2. SCROLL REVEAL & INTERSECTION OBSERVER PER ANIMAZIONE STRADA
+            const revealElements = document.querySelectorAll('.reveal');
+            const timelineNodes = document.querySelectorAll('.timeline-node');
+
+            const observerOptions = {
+                root: null,
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const revealObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        
+                        // Se è una pietra miliare del percorso, attiva l'effetto luce catarifrangente
+                        if(entry.target.classList.contains('timeline-node')) {
+                            entry.target.classList.add('active');
+                        }
+                        
+                        // Se l'elemento contiene counter numerici, avvia il conteggio progressivo
+                        const counters = entry.target.querySelectorAll('.counter');
+                        if(counters.length > 0) {
+                            counters.forEach(counter => runCounter(counter));
+                        }
+                        
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            revealElements.forEach(el => revealObserver.observe(el));
+            timelineNodes.forEach(node => revealObserver.observe(node));
+
+            // 3. ANIMAZIONE PROGRESSIVA DEI NUMERI (COUNTERS)
+            function runCounter(counter) {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000; // Durata dell'effetto in ms
+                const stepTime = Math.max(Math.floor(duration / target), 15);
+                let current = 0;
+
+                const timer = setInterval(() => {
+                    current += Math.ceil(target / (duration / stepTime));
+                    if (current >= target) {
+                        counter.textContent = target + (target > 100 ? '+' : '');
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = current;
+                    }
+                }, stepTime);
+            }
+
+            // 4. MOUSE TRACKING PER EFFETTO RIFRANGENTE SUI CARTELLI AUTOSTRADALI
+            const signs = document.querySelectorAll('.highway-sign');
+            signs.forEach(sign => {
+                sign.addEventListener('mousemove', (e) => {
+                    const rect = sign.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    
+                    sign.style.setProperty('--x', `${x}px`);
+                    sign.style.setProperty('--y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
