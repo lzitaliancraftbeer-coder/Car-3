@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="it" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Multiservizi | Sicurezza Operativa e Infrastrutture Nazionali</title>
+    <meta name="description" content="Partner strategico per ANAS, Autostrade per l'Italia ed Enti Pubblici. Segnaletica, sicurezza cantieri e pronto intervento infrastrutturale H24.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            black: '#0D0D0D',
+                            dark: '#1A1A1A',
+                            yellow: '#FFC107',
+                            red: '#D62828',
+                            gray: '#2A2A2A',
+                            light: '#FFFFFF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Premium Utilities */
+        .glassmorphism {
+            background: rgba(26, 26, 26, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-premium {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.01) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-yellow {
+            box-shadow: 0 0 30px rgba(255, 193, 7, 0.2);
+        }
+        .glow-red {
+            box-shadow: 0 0 20px rgba(214, 40, 40, 0.4);
+        }
+        .text-glow-yellow {
+            text-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+        }
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0D0D0D; }
+        ::-webkit-scrollbar-thumb { background: #2A2A2A; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #FFC107; }
+        
+        .clip-path-polygon {
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body class="bg-brand-black text-brand-light font-sans overflow-x-hidden antialiased">
+
+    <div id="preloader" class="fixed inset-0 z-[9999] bg-brand-black flex flex-col justify-center items-center">
+        <div class="mb-4 text-center">
+            <span class="font-display text-2xl font-bold tracking-widest text-brand-light">CAR<span class="text-brand-yellow">MULTISERVIZI</span></span>
+            <div class="text-[10px] tracking-[0.5em] text-gray-500 uppercase mt-1">Infrastrutture Nazionali</div>
+        </div>
+        <div class="w-48 h-[2px] bg-brand-dark relative overflow-hidden rounded-full">
+            <div id="preloader-bar" class="absolute top-0 left-0 h-full w-0 bg-brand-yellow transition-all duration-300 ease-out"></div>
+        </div>
+        <div id="preloader-text" class="text-[11px] font-mono text-brand-yellow mt-2 tracking-wider">INITIALIZING SYSTEMS... 0%</div>
+    </div>
+
+    <header class="fixed top-0 left-0 w-full z-50 transition-all duration-500 glassmorphism border-b border-white/5 py-4 px-6 lg:px-12 flex justify-between items-center">
+        <a href="#" class="flex flex-col">
+            <span class="font-display text-xl lg:text-2xl font-black tracking-wider">CAR<span class="text-brand-yellow">MULTISERVIZI</span></span>
+            <span class="text-[9px] uppercase tracking-[0.38em] text-gray-400 font-medium">Sicurezza & Infrastrutture</span>
+        </a>
+        
+        <nav class="hidden lg:flex items-center gap-8 text-sm font-medium tracking-wide text-gray-300">
+            <a href="#servizi" class="hover:text-brand-yellow transition-colors">Servizi Enterprise</a>
+            <a href="#dashboard" class="hover:text-brand-yellow transition-colors">Controllo Operativo</a>
+            <a href="#flotta" class="hover:text-brand-yellow transition-colors">Asset & Flotta</a>
+            <a href="#copertura" class="hover:text-brand-yellow transition-colors">Presidio Territoriale</a>
+            <a href="#certificazioni" class="hover:text-brand-yellow transition-colors">Qualifiche SOA</a>
+        </nav>
+
+        <div class="flex items-center gap-4">
+            <a href="tel:800000000" class="hidden sm:flex items-center gap-2 bg-brand-red/10 border border-brand-red/30 px-3 py-1.5 rounded text-xs font-mono font-bold text-brand-red animate-pulse uppercase tracking-wider">
+                <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> H24 Emergency
+            </a>
+            <a href="#contatti" class="bg-brand-yellow text-brand-black px-5 py-2.5 rounded text-xs font-bold uppercase tracking-wider hover:bg-white transition-all duration-300 shadow-lg shadow-brand-yellow/10">
+                Gara / Appalto
+            </a>
+        </div>
+    </header>
+
+    <section class="relative h-screen w-full overflow-hidden flex items-center justify-center pt-16">
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/70 to-transparent z-10"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-transparent to-brand-black/50 z-10"></div>
+            <img src="https://images.unsplash.com/photo-1542362567-b07eac790947?auto=format&fit=crop&w=1920&q=80" alt="Cantiere Autostradale Notturno" class="w-full h-full object-cover scale-105 filter brightness-50 contrast-125 select-none" />
+            
+            <div class="absolute top-1/4 right-1/4 w-96 h-96 bg-brand-yellow/10 rounded-full filter blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-1/3 left-1/3 w-80 h-80 bg-brand-red/5 rounded-full filter blur-[100px] animate-pulse" style="animation-duration: 4s;"></div>
+        </div>
+
+        <div class="relative z-20 w-full max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center h-full pt-12">
+            <div class="lg:col-span-8 flex flex-col justify-center">
+                <div class="inline-flex items-center gap-2 bg-white/5 border border-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs tracking-wider uppercase text-gray-300 mb-6 w-fit">
+                    <span class="w-2 h-2 rounded-full bg-brand-yellow animate-ping"></span> Operativi per Reti Autostradali, ANAS ed Enti Pubblici
+                </div>
+                
+                <h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight text-white leading-[1.05] mb-6">
+                    Sicurezza Operativa <br>per le <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-brand-yellow">Infrastrutture</span> di Domani
+                </h1>
+                
+                <p class="text-gray-400 text-base sm:text-lg lg:text-xl max-w-2xl font-light leading-relaxed mb-10">
+                    Interveniamo ogni giorno su scala nazionale per garantire viabilità, sicurezza e continuità tecnologica sulle grandi reti stradali italiane.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+                    <a href="#contatti" class="bg-brand-yellow text-brand-black px-8 py-4 rounded font-bold uppercase tracking-wider text-sm hover:bg-white text-center transition-all duration-300 flex items-center justify-center gap-3 shadow-xl shadow-brand-yellow/10">
+                        Richiedi Preventivo / Appalto <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                    <a href="#servizi" class="bg-transparent border border-white/20 text-white hover:bg-white/5 px-8 py-4 rounded font-bold uppercase tracking-wider text-sm text-center transition-all duration-300">
+                        Scopri i Servizi
+                    </a>
+                </div>
+            </div>
+            
+            <div class="hidden lg:col-span-4 lg:flex flex-col gap-4 glassmorphism p-6 rounded-lg border border-white/10 glow-yellow">
+                <div class="flex justify-between items-center border-b border-white/10 pb-3">
+                    <span class="text-[11px] font-mono tracking-wider text-brand-yellow uppercase flex items-center gap-2">
+                        <span class="w-1.5 h-1.5 rounded-full bg-brand-red animate-ping"></span> Live Status
+                    </span>
+                    <span class="text-[11px] font-mono text-gray-400">SYS_REV: 2026.4</span>
+                </div>
+                <div class="space-y-4 py-2">
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Squadre Attive in Rete</div>
+                        <div class="font-display text-xl font-bold font-mono">42 <span class="text-xs text-brand-yellow">UNITÀ</span></div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Pronto Intervento Attivo</div>
+                        <div class="font-display text-xl font-bold font-mono text-brand-red">H24 / 7 <span class="text-xs text-gray-400">DISPATCH</span></div>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-gray-500 uppercase tracking-wider mb-1">Ultima Ispezione Infrastruttura</div>
+                        <div class="text-xs font-mono text-gray-300 flex items-center gap-1.5">
+                            <i data-lucide="check-circle" class="w-3.5 h-3.5 text-green-500"></i> Tratto A1 Milano-Napoli OK
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 hidden md:block">
+            <div class="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
+                <div class="w-1 h-2 bg-brand-yellow rounded-full animate-bounce"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="relative z-30 bg-brand-dark py-16 border-y border-white/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12 text-center lg:text-left">
+                <div class="counter-item group">
+                    <div class="text-[10px] uppercase font-mono tracking-[0.2em] text-gray-400 mb-2 block border-l-2 border-brand-yellow pl-3">Solida Presenza</div>
+                    <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight text-glow-yellow mb-1">
+                        <span class="counter" data-target="25">0</span><span class="text-brand-yellow">+</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-400 font-light">Anni di esperienza nel settore</p>
+                </div>
+                <div class="counter-item group">
+                    <div class="text-[10px] uppercase font-mono tracking-[0.2em] text-gray-400 mb-2 block border-l-2 border-brand-yellow pl-3">Efficacia Tempestiva</div>
+                    <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight text-glow-yellow mb-1">
+                        <span class="counter" data-target="1450">0</span><span class="text-brand-yellow">+</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-400 font-light">Interventi d'emergenza eseguiti</p>
+                </div>
+                <div class="counter-item group">
+                    <div class="text-[10px] uppercase font-mono tracking-[0.2em] text-gray-400 mb-2 block border-l-2 border-brand-yellow pl-3">Raggio Operativo</div>
+                    <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight text-glow-yellow mb-1">
+                        <span class="counter" data-target="8200">0</span><span class="text-brand-yellow">K</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-400 font-light">Chilometri di rete stradale gestiti</p>
+                </div>
+                <div class="counter-item group">
+                    <div class="text-[10px] uppercase font-mono tracking-[0.2em] text-gray-400 mb-2 block border-l-2 border-brand-yellow pl-3">Fiducia Certificata</div>
+                    <div class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight text-glow-yellow mb-1">
+                        <span class="counter" data-target="120">0</span><span class="text-brand-yellow">+</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-gray-400 font-light">Enti Pubblici e General Contractor serviti</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="py-24 lg:py-32 relative bg-brand-black cross-bg">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="mb-16 max-w-3xl">
+                <span class="text-xs font-mono uppercase text-brand-yellow tracking-[0.3em] block mb-3">// CENTRO DI CONTROLLO OPERATIVO</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-white mb-6">
+                    Potenza logistica e coordinamento ad alta tecnologia.
+                </h2>
+                <p class="text-gray-400 font-light text-base sm:text-lg">
+                    Abbiamo superato il concetto di classica impresa. Strutturiamo la nostra forza d'intervento attraverso un ecosistema integrato di tracciamento e monitoraggio delle squadre in tempo reale.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                
+                <div class="glass-premium p-8 rounded-xl relative overflow-hidden group border border-white/5 hover:border-brand-yellow/30 transition-all duration-500 md:col-span-1">
+                    <div class="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                        <i data-lucide="truck" class="w-24 h-24 text-white"></i>
+                    </div>
+                    <div class="flex items-center gap-3 mb-6">
+                        <div class="p-2.5 bg-brand-yellow/10 rounded border border-brand-yellow/20 text-brand-yellow">
+                            <i data-lucide="truck" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-lg text-white">Asset & Mezzi Speciali</h3>
+                    </div>
+                    <div class="space-y-3 font-mono text-xs">
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Attenuatori d'urto ad alto carico</span>
+                            <span class="text-brand-yellow font-bold">14 Unità</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Camion attrezzati segnaletica</span>
+                            <span class="text-brand-yellow font-bold">28 Unità</span>
+                        </div>
+                        <div class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Officine mobili d'intervento</span>
+                            <span class="text-brand-yellow font-bold">12 Unità</span>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-[11px] font-mono text-gray-500">
+                        <span>DISPONIBILITÀ MEZZI</span>
+                        <span class="text-green-500 flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-green-500 animate-ping"></span> 100% PRONTI</span>
+                    </div>
+                </div>
+
+                <div class="glass-premium p-8 rounded-xl relative overflow-hidden group border border-white/5 hover:border-brand-yellow/30 transition-all duration-500 md:col-span-2 flex flex-col justify-between">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <div class="lg:col-span-7">
+                            <div class="flex items-center gap-3 mb-6">
+                                <div class="p-2.5 bg-brand-yellow/10 rounded border border-brand-yellow/20 text-brand-yellow">
+                                    <i data-lucide="users" class="w-5 h-5"></i>
+                                </div>
+                                <h3 class="font-display font-bold text-lg text-white">Squadre di Pronto Intervento H24</h3>
+                            </div>
+                            <p class="text-gray-400 text-sm font-light mb-4">
+                                Personale altamente qualificato per la gestione di criticità macro-infrastrutturali, coordinato via radio e GPS per azzerare i tempi di latenza.
+                            </p>
+                            <div class="flex gap-4 text-center">
+                                <div class="bg-white/5 p-3 rounded border border-white/5 flex-1">
+                                    <div class="text-lg font-mono font-bold text-white">18 min</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-gray-500">Tempo medio di attivazione</div>
+                                </div>
+                                <div class="bg-white/5 p-3 rounded border border-white/5 flex-1">
+                                    <div class="text-lg font-mono font-bold text-brand-yellow">H24/7/365</div>
+                                    <div class="text-[10px] uppercase tracking-wider text-gray-500">Continuità Garantita</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:col-span-5 flex justify-center relative">
+                            <div class="w-40 h-40 rounded-full border border-brand-yellow/20 flex items-center justify-center relative">
+                                <div class="absolute inset-0 rounded-full border border-brand-yellow/10 animate-ping" style="animation-duration: 3s;"></div>
+                                <div class="w-28 h-28 rounded-full border border-brand-yellow/30 flex items-center justify-center">
+                                    <div class="w-16 h-16 rounded-full border border-brand-yellow/40"></div>
+                                </div>
+                                <span class="absolute top-8 left-12 w-2 h-2 rounded-full bg-brand-yellow shadow-lg shadow-brand-yellow"></span>
+                                <span class="absolute bottom-12 right-10 w-2 h-2 rounded-full bg-brand-red shadow-lg shadow-brand-red animate-pulse"></span>
+                                <div class="absolute inset-0 bg-gradient-to-tr from-transparent via-brand-yellow/5 to-transparent rounded-full animate-spin" style="animation-duration: 5s;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-premium p-8 rounded-xl relative overflow-hidden group border border-white/5 hover:border-brand-yellow/30 transition-all duration-500 md:col-span-3 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-1">
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="p-2.5 bg-brand-red/10 rounded border border-brand-red/20 text-brand-red">
+                                <i data-lucide="shield-alert" class="w-5 h-5"></i>
+                            </div>
+                            <h3 class="font-display font-bold text-lg text-white">Sicurezza e Grandi Appalti</h3>
+                        </div>
+                        <p class="text-gray-400 text-sm font-light">
+                            Ogni cantiere, segnaletica o intervento segue protocolli rigidi validati a livello europeo, azzerando i rischi di contenzioso o sanzione per l'Ente Committente.
+                        </p>
+                    </div>
+                    <div class="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="p-4 bg-brand-black/50 border border-white/5 rounded-lg flex items-start gap-3">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-yellow mt-1"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-white mb-1">Riconoscimento ANAS</h4>
+                                <p class="text-xs text-gray-500">Iscrizione agli elenchi fornitori qualificati per manutenzione straordinaria ed emergenza.</p>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-brand-black/50 border border-white/5 rounded-lg flex items-start gap-3">
+                            <i data-lucide="check" class="w-4 h-4 text-brand-yellow mt-1"></i>
+                            <div>
+                                <h4 class="text-sm font-bold text-white mb-1">Infrastruttura Connessa</h4>
+                                <p class="text-xs text-gray-500">Sistemi di cartellonistica e segnalamento a norma di Codice della Strada con certificazione dei materiali.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="servizi" class="relative z-30 bg-brand-black overflow-hidden">
+        
+        <div class="service-panel min-h-screen w-full flex items-center relative border-b border-white/5">
+            <div class="absolute inset-0 z-0 lg:w-1/2 lg:left-1/2 h-full">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/40 to-brand-black lg:via-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=1200&q=80" alt="Segnaletica Stradale" class="w-full h-full object-cover filter brightness-50 contrast-110">
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 w-full py-20 grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-6 flex flex-col justify-center">
+                    <span class="text-brand-yellow font-mono text-xs tracking-[0.3em] uppercase mb-2">01 / ASSET DIVISION</span>
+                    <h3 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6">Segnaletica Stradale</h3>
+                    <p class="text-gray-400 font-light text-base sm:text-lg mb-8 leading-relaxed">
+                        Progettazione, tracciamento e posa in opera di segnaletica orizzontale e verticale ad altissima visibilità. Utilizziamo vernici rifrangenti premium e supporti strutturali omologati per sopportare i massimi carichi di traffico autostradale.
+                    </p>
+                    <ul class="space-y-2 mb-8 text-sm text-gray-300 font-mono">
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Vernici poliuretaniche ad alta durata</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Segnaletica verticale per tratte ad alta velocità</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Piani di segnalamento complessi approvati</li>
+                    </ul>
+                    <a href="#contatti" class="inline-flex items-center gap-3 font-bold uppercase text-xs tracking-wider text-brand-yellow hover:text-white transition-colors">
+                        RICHIEDI DETTAGLI TECNICI <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-panel min-h-screen w-full flex items-center relative border-b border-white/5">
+            <div class="absolute inset-0 z-0 lg:w-1/2 lg:right-1/2 h-full">
+                <div class="absolute inset-0 bg-gradient-to-l from-brand-black via-brand-black/40 to-brand-black lg:via-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1590069261209-f8e9b8642343?auto=format&fit=crop&w=1200&q=80" alt="Sicurezza Cantieri" class="w-full h-full object-cover filter brightness-50 contrast-110">
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 w-full py-20 grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-start-7 lg:col-span-6 flex flex-col justify-center">
+                    <span class="text-brand-yellow font-mono text-xs tracking-[0.3em] uppercase mb-2">02 / COMPLIANCE & SAFETY</span>
+                    <h3 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6">Sicurezza Cantieri</h3>
+                    <p class="text-gray-400 font-light text-base sm:text-lg mb-8 leading-relaxed">
+                        Allestimento completo di cantieri stradali e autostradali, sia fissi che mobili, in conformità con il D.M. 10 Luglio 2002. Fornitura e posa di barriere di sicurezza, attenuatori d'urto e sistemi di segnalamento luminoso avanzato.
+                    </p>
+                    <ul class="space-y-2 mb-8 text-sm text-gray-300 font-mono">
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Barriere New Jersey e attenuatori omologati</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Sistemi di preavviso luminoso PMV mobili</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Gestione e coordinamento movieri qualificati</li>
+                    </ul>
+                    <a href="#contatti" class="inline-flex items-center gap-3 font-bold uppercase text-xs tracking-wider text-brand-yellow hover:text-white transition-colors">
+                        RICHIEDI DETTAGLI TECNICI <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-panel min-h-screen w-full flex items-center relative border-b border-white/5">
+            <div class="absolute inset-0 z-0 lg:w-1/2 lg:left-1/2 h-full">
+                <div class="absolute inset-0 bg-gradient-to-r from-brand-black via-brand-black/40 to-brand-black lg:via-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1541888946425-d81bb19240f5?auto=format&fit=crop&w=1200&q=80" alt="Manutenzione Stradale" class="w-full h-full object-cover filter brightness-50 contrast-110">
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 w-full py-20 grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-span-6 flex flex-col justify-center">
+                    <span class="text-brand-yellow font-mono text-xs tracking-[0.3em] uppercase mb-2">03 / INFRASTRUCTURES</span>
+                    <h3 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6">Manutenzione Infrastrutture</h3>
+                    <p class="text-gray-400 font-light text-base sm:text-lg mb-8 leading-relaxed">
+                        Interventi strutturali e preventivi per il ripristino del manto stradale, riparazione di barriere danneggiate, pulizia delle pertinenze e opere d'arte collegate (ponti, viadotti, gallerie). Garantiamo precisione millimetrica e tempistiche ridotte al minimo.
+                    </p>
+                    <ul class="space-y-2 mb-8 text-sm text-gray-300 font-mono">
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Ripristino pavimentazioni e asfalti speciali</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Manutenzione giunti di dilatazione e viadotti</li>
+                        <li><i class="fa-solid px-2 text-brand-yellow fa-chevron-right text-[10px]"></i> Opere di idrolavaggio e bonifica gallerie</li>
+                    </ul>
+                    <a href="#contatti" class="inline-flex items-center gap-3 font-bold uppercase text-xs tracking-wider text-brand-yellow hover:text-white transition-colors">
+                        RICHIEDI DETTAGLI TECNICI <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="service-panel min-h-screen w-full flex items-center relative">
+            <div class="absolute inset-0 z-0 lg:w-1/2 lg:right-1/2 h-full">
+                <div class="absolute inset-0 bg-gradient-to-l from-brand-black via-brand-black/40 to-brand-black lg:via-transparent z-10"></div>
+                <img src="https://images.unsplash.com/photo-1616422285623-13ff0162193c?auto=format&fit=crop&w=1200&q=80" alt="Pronto Intervento H24" class="w-full h-full object-cover filter brightness-30 contrast-125">
+                <div class="absolute inset-0 bg-brand-red/5 mix-blend-color animate-pulse"></div>
+            </div>
+            <div class="relative z-20 max-w-7xl mx-auto px-6 lg:px-12 w-full py-20 grid grid-cols-1 lg:grid-cols-12">
+                <div class="lg:col-start-7 lg:col-span-6 flex flex-col justify-center">
+                    <span class="text-brand-red font-mono text-xs tracking-[0.3em] uppercase mb-2 flex items-center gap-2">
+                        <span class="w-2 h-2 bg-brand-red rounded-full animate-ping"></span> CRITICAL EMERGENCY DIVISION
+                    </span>
+                    <h3 class="font-display text-4xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight mb-6">Pronto Intervento H24</h3>
+                    <p class="text-gray-400 font-light text-base sm:text-lg mb-8 leading-relaxed">
+                        Unità speciali pronte alla partenza immediata in caso di incidenti, sversamenti di liquidi pericolosi, detriti o cedimenti strutturali sulla rete stradale. Ripristiniamo la viabilità in tempi record proteggendo la vita degli automobilisti.
+                    </p>
+                    <div class="glassmorphism p-4 rounded border border-brand-red/20 glow-red mb-8">
+                        <div class="text-xs font-mono text-brand-red font-bold uppercase mb-1">NUMERO DI DISPATCH CENTRALE COMMITTENTI</div>
+                        <div class="text-xl sm:text-2xl font-mono font-black text-white">800.000.000 <span class="text-xs font-normal text-gray-400 ml-2">(Riservato Enti e Forze dell'Ordine)</span></div>
+                    </div>
+                    <a href="#contatti" class="inline-flex items-center gap-3 font-bold uppercase text-xs tracking-wider text-brand-yellow hover:text-white transition-colors">
+                        RICHIEDI DETTAGLI INSERIMENTO IN ELENCHI <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="flotta" class="py-24 lg:py-32 bg-brand-dark relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-16 gap-4">
+                <div>
+                    <span class="text-xs font-mono uppercase text-brand-yellow tracking-[0.3em] block mb-3">// MEZZI SPECIALI E LOGISTICA</span>
+                    <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-white">
+                        La nostra flotta operativa.
+                    </h2>
+                </div>
+                <p class="text-gray-400 font-light max-w-md text-sm lg:text-base">
+                    Investiamo costantemente in veicoli industriali pesanti di ultima generazione conformi alle normative ambientali più stringenti e dotati di sistemi di sicurezza passiva avanzati.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="group relative h-96 rounded-lg overflow-hidden border border-white/5 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=600&q=80" alt="Camion Operativi Heavy Duty" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent p-6 flex flex-col justify-end">
+                        <span class="text-[10px] font-mono text-brand-yellow uppercase tracking-widest mb-1">Heavy Logistics</span>
+                        <h4 class="font-display font-bold text-lg text-white">Camion Operativi</h4>
+                        <p class="text-xs text-gray-400 font-light mt-1">Mezzi pesanti attrezzati per trasporto materiali e allestimenti macro.</p>
+                    </div>
+                </div>
+
+                <div class="group relative h-96 rounded-lg overflow-hidden border border-white/5 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?auto=format&fit=crop&w=600&q=80" alt="Attenuatori d'Urto TMA" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent p-6 flex flex-col justify-end">
+                        <span class="text-[10px] font-mono text-brand-red uppercase tracking-widest mb-1">Safety Asset</span>
+                        <h4 class="font-display font-bold text-lg text-white">Attenuatori d'Urto</h4>
+                        <p class="text-xs text-gray-400 font-light mt-1">Sistemi di protezione assorbenti TMA ad alto impatto per cantieri mobili.</p>
+                    </div>
+                </div>
+
+                <div class="group relative h-96 rounded-lg overflow-hidden border border-white/5 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80" alt="Mezzi Segnaletica ad alta velocità" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent p-6 flex flex-col justify-end">
+                        <span class="text-[10px] font-mono text-brand-yellow uppercase tracking-widest mb-1">Precision Marking</span>
+                        <h4 class="font-display font-bold text-lg text-white">Mezzi Segnaletica</h4>
+                        <p class="text-xs text-gray-400 font-light mt-1">Tracciatrici semoventi computerizzate con sistemi laser di puntamento.</p>
+                    </div>
+                </div>
+
+                <div class="group relative h-96 rounded-lg overflow-hidden border border-white/5 shadow-2xl">
+                    <img src="https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?auto=format&fit=crop&w=600&q=80" alt="Officine Mobili di soccorso tecnico" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 filter brightness-75">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-black via-brand-black/20 to-transparent p-6 flex flex-col justify-end">
+                        <span class="text-[10px] font-mono text-brand-yellow uppercase tracking-widest mb-1">Rapid Dispatch</span>
+                        <h4 class="font-display font-bold text-lg text-white">Officine Mobili</h4>
+                        <p class="text-xs text-gray-400 font-light mt-1">Furgoni attrezzati per lavorazioni autonome e primo intervento tecnico.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="copertura" class="py-24 lg:py-32 bg-brand-black relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-5">
+                <span class="text-xs font-mono uppercase text-brand-yellow tracking-[0.3em] block mb-3">// PRESIDIO STRATEGICO DEL TERRITORIO</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-black tracking-tight text-white mb-6">
+                    Copertura Nazionale e Logistica Integrata.
+                </h2>
+                <p class="text-gray-400 font-light text-base mb-6 leading-relaxed">
+                    Disponiamo di centri operativi dislocati in posizioni nodali per raggiungere qualsiasi snodo autostradale o cantiere del centro-nord e sud Italia entro i tempi stabiliti dagli SLA di gara.
+                </p>
+                <div class="space-y-4 font-mono text-xs">
+                    <div class="flex items-center gap-3 p-3 bg-white/5 border border-white/5 rounded">
+                        <i data-lucide="map-pin" class="text-brand-yellow w-4 h-4"></i>
+                        <div>
+                            <span class="text-white font-bold block">Hub Centrale & Direzione Operativa</span>
+                            <span class="text-gray-500">Logistica, parco mezzi primario, officine centrali.</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-3 bg-white/5 border border-white/5 rounded">
+                        <i data-lucide="navigation" class="text-brand-yellow w-4 h-4"></i>
+                        <div>
+                            <span class="text-white font-bold block">Distaccamenti di Tratta</span>
+                            <span class="text-gray-500">Presidi mobili stazionati per pronto intervento immediato autostrade.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7 flex justify-center relative">
+                <div class="absolute inset-0 bg-brand-yellow/5 rounded-full filter blur-[120px] -z-10"></div>
+                <svg viewBox="0 0 400 500" class="w-full max-w-[400px] h-auto stroke-brand-yellow/20 fill-none stroke-1">
+                    <path d="M150,100 L200,180 L220,280 L280,380 M200,180 L280,220 M120,80 L200,180" stroke-dasharray="4,4" class="stroke-gray-700" />
+                    <polygon points="100,50 180,40 230,80 200,150 250,220 280,320 330,380 300,420 250,380 210,300 180,250 140,200 120,120" stroke="rgba(255,255,255,0.05)" stroke-width="2"/>
+                    <circle cx="150" cy="80" r="8" class="fill-brand-yellow/20 stroke-brand-yellow animate-pulse" />
+                    <circle cx="200" cy="180" r="12" class="fill-brand-yellow/20 stroke-brand-yellow animate-pulse" />
+                    <circle cx="220" cy="280" r="6" class="fill-brand-red/20 stroke-brand-red" />
+                    <circle cx="280" cy="380" r="10" class="fill-brand-yellow/20 stroke-brand-yellow animate-pulse" />
+                    <text x="165" y="85" fill="#888" font-size="9" font-family="monospace">HUB NORD</text>
+                    <text x="215" y="185" fill="#FFC107" font-size="9" font-family="monospace" font-weight="bold">HQ DIREZIONE</text>
+                    <text x="235" y="285" fill="#888" font-size="9" font-family="monospace">PRESIDIO APPIO</text>
+                    <text x="295" y="385" fill="#888" font-size="9" font-family="monospace">HUB SUD</text>
+                </svg>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="certificazioni" class="py-20 bg-brand-dark border-y border-white/5 relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-12">
+                <span class="text-xs font-mono uppercase text-brand-yellow tracking-[0.3em] block mb-2">REQUISITI DI LEGGE & ABILITAZIONI</span>
+                <h3 class="font-display text-2xl sm:text-4xl font-black text-white">Certificazioni di Qualificazione Enterprise</h3>
+            </div>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div class="glassmorphism p-6 rounded text-center border border-white/5 hover:border-brand-yellow/40 transition-all duration-300">
+                    <div class="text-brand-yellow font-display font-black text-2xl mb-1 tracking-tight">SOA OG3</div>
+                    <div class="text-[11px] font-mono text-gray-400 uppercase tracking-wider mb-3">Classifica IV-BIS</div>
+                    <p class="text-xs text-gray-500 font-light">Strade, autostrade, ponti, viadotti, ferrovie e relative opere d'arte.</p>
+                </div>
+                <div class="glassmorphism p-6 rounded text-center border border-white/5 hover:border-brand-yellow/40 transition-all duration-300">
+                    <div class="text-brand-yellow font-display font-black text-2xl mb-1 tracking-tight">SOA OS10</div>
+                    <div class="text-[11px] font-mono text-gray-400 uppercase tracking-wider mb-3">Classifica IV</div>
+                    <p class="text-xs text-gray-500 font-light">Segnaletica stradale non luminosa, barriere e protezioni stradali.</p>
+                </div>
+                <div class="glassmorphism p-6 rounded text-center border border-white/5 hover:border-brand-yellow/40 transition-all duration-300">
+                    <div class="text-white font-display font-black text-2xl mb-1 tracking-tight">ISO 9001</div>
+                    <div class="text-[11px] font-mono text-gray-400 uppercase tracking-wider mb-3">Sistema Qualità</div>
+                    <p class="text-xs text-gray-500 font-light">Gestione dei processi aziendali orientata alla massima efficienza e tracciabilità.</p>
+                </div>
+                <div class="glassmorphism p-6 rounded text-center border border-white/5 hover:border-brand-yellow/40 transition-all duration-300">
+                    <div class="text-white font-display font-black text-2xl mb-1 tracking-tight">ISO 45001</div>
+                    <div class="text-[11px] font-mono text-gray-400 uppercase tracking-wider mb-3">Sicurezza Lavoro</div>
+                    <p class="text-xs text-gray-500 font-light">Tutela totale della salute e sicurezza delle squadre sul campo in scenari critici.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 lg:py-32 bg-brand-black relative">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            
+            <div class="text-center mb-20">
+                <span class="text-xs font-mono uppercase text-brand-yellow tracking-[0.3em] block mb-2">// METODOLOGIA RIGIDA</span>
+                <h2 class="font-display text-3xl sm:text-5xl font-black text-white">Ingegnerizzazione del Cantiere</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-8 relative">
+                
+                <div class="timeline-step relative p-6 bg-white/5 rounded border-l-4 border-brand-yellow">
+                    <div class="font-mono text-brand-yellow font-bold text-sm mb-2">01. INTAKE</div>
+                    <h4 class="font-display font-bold text-base text-white mb-2">Richiesta & Analisi</h4>
+                    <p class="text-xs text-gray-400 font-light">Analisi del capitolato d'appalto o dei requisiti urgenti dell'Ente Committente.</p>
+                </div>
+
+                <div class="timeline-step relative p-6 bg-white/5 rounded border-l-4 border-brand-yellow">
+                    <div class="font-mono text-brand-yellow font-bold text-sm mb-2">02. SURVEY</div>
+                    <h4 class="font-display font-bold text-base text-white mb-2">Studio & Rilievo</h4>
+                    <p class="text-xs text-gray-400 font-light">Sopralluogo tecnico immediato con mappatura fotogrammetrica e georeferenziazione.</p>
+                </div>
+
+                <div class="timeline-step relative p-6 bg-white/5 rounded border-l-4 border-brand-yellow">
+                    <div class="font-mono text-brand-yellow font-bold text-sm mb-2">03. PLANNING</div>
+                    <h4 class="font-display font-bold text-base text-white mb-2">Pianificazione</h4>
+                    <p class="text-xs text-gray-400 font-light">Redazione del PSC, approvazione dei flussi di deviazione viabilità e logistica mezzi.</p>
+                </div>
+
+                <div class="timeline-step relative p-6 bg-white/5 rounded border-l-4 border-brand-yellow">
+                    <div class="font-mono text-brand-yellow font-bold text-sm mb-2">04. ACTION</div>
+                    <h4 class="font-display font-bold text-base text-white mb-2">Intervento Rapido</h4>
+                    <p class="text-xs text-gray-400 font-light">Apertura cantiere e dispiegamento dei mezzi speciali e del personale operativo.</p>
+                </div>
+
+                <div class="timeline-step relative p-6 bg-white/5 rounded border-l-4 border-brand-yellow">
+                    <div class="font-mono text-brand-yellow font-bold text-sm mb-2">05. SIGN-OFF</div>
+                    <h4 class="font-display font-bold text-base text-white mb-2">Collaudo Finale</h4>
+                    <p class="text-xs text-gray-400 font-light">Verifica di conformità ottica e strutturale, smobilitazione e consegna all'Ente.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-dark border-t border-white/5 overflow-hidden">
+        <div class="max-w-7xl mx-auto px-6 lg:px-12">
+            <div class="text-center mb-10">
+                <span class="text-xs font-mono uppercase text-gray-500 tracking-widest block mb-2">COMPLIANCE STRUTTURALE CON</span>
+                <div class="text-xs uppercase tracking-[0.2em] font-medium text-gray-400">Principali Enti Gestori Reti Stradali Italiane</div>
+            </div>
+            
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 items-center text-center font-display font-black text-lg tracking-widest opacity-40 grayscale contrast-200">
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity">ANAS</div>
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity text-sm">AUTOSTRADE</div>
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity">REGIONE</div>
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity">PROVINCIA</div>
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity text-xs">COMUNI ITALIANI</div>
+                <div class="p-4 border border-white/10 rounded hover:opacity-100 transition-opacity text-xs">GENERAL CONTRACTOR</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contatti" class="relative py-24 lg:py-32 bg-brand-black overflow-hidden">
+        <div class="absolute inset-0 z-0 opacity-20">
+            <img src="https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1920&q=80" alt="Infrastruttura industriale" class="w-full h-full object-cover filter grayscale">
+        </div>
+        
+        <div class="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            
+            <div class="lg:col-span-6">
+                <span class="text-xs font-mono uppercase text-brand-red font-bold tracking-[0.3em] block mb-3">UFFICIO GARE E PREVENTIVI</span>
+                <h2 class="font-display text-4xl sm:text-5xl font-black text-white mb-6 leading-tight">
+                    Pronti ad intervenire quando ogni minuto conta.
+                </h2>
+                <p class="text-gray-400 font-light text-base mb-8">
+                    Mettiti in contatto con la nostra direzione commerciale e logistica per l'inserimento negli albi fornitori, la partecipazione ad appalti pubblici e privati, o per richiedere interventi urgenti di ripristino e segnaletica.
+                </p>
+                
+                <div class="space-y-4 text-sm font-mono text-gray-300">
+                    <div class="flex items-center gap-3"><i data-lucide="mail" class="text-brand-yellow w-4 h-4"></i> appalti@carmultiservizi.it</div>
+                    <div class="flex items-center gap-3"><i data-lucide="phone" class="text-brand-yellow w-4 h-4"></i> Centralino Nazionale: +39 02 8000 0000</div>
+                    <div class="flex items-center gap-3"><i data-lucide="building" class="text-brand-yellow w-4 h-4"></i> Sede Legale ed Operativa: Polo Industriale, Lotto 14 - Italia</div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-6 glassmorphism p-8 rounded-xl border border-white/10">
+                <form id="contactForm" onsubmit="event.preventDefault(); alert('Richiesta trasmessa all\'ufficio Gare e Contratti.');" class="space-y-5">
+                    <div>
+                        <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Ente / Società Richiedente *</label>
+                        <input type="text" required class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-white transition-colors" placeholder="Es. Comune di Milano / Autostrade Spa">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Nome Referente *</label>
+                            <input type="text" required class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-white transition-colors">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Recapito Telefonico *</label>
+                            <input type="tel" required class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-white transition-colors">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Indirizzo Email Certificata o Istituzionale *</label>
+                        <input type="email" required class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-white transition-colors" placeholder="nome@ente.it">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Tipologia Appalto / Intervento *</label>
+                        <select class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-gray-300 transition-colors">
+                            <option>Segnaletica Stradale Straordinaria</option>
+                            <option>Allestimento e Sicurezza Cantieri</option>
+                            <option>Manutenzione Infrastrutturale Continuativa</option>
+                            <option>Richiesta Pronto Intervento d'Urgenza</option>
+                            <option>Inclusione in Albo Fornitori</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-mono uppercase text-gray-400 mb-1 tracking-wider">Dettagli del Progetto / Note Tecniche</label>
+                        <textarea class="w-full bg-brand-black/80 border border-white/10 rounded px-4 py-3 text-sm focus:outline-none focus:border-brand-yellow text-white transition-colors h-24" placeholder="Fornire indicazioni preliminari o scadenze del bando..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-brand-yellow text-brand-black font-bold uppercase tracking-wider text-xs py-4 rounded hover:bg-white transition-colors shadow-lg shadow-brand-yellow/5">
+                        Invia Richiesta al Team Operativo
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="bg-brand-black border-t border-white/5 py-12 px-6 lg:px-12 text-xs text-gray-500">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-center md:items-start">
+                <span class="font-display text-base font-black tracking-wider text-white">CAR<span class="text-brand-yellow">MULTISERVIZI</span></span>
+                <span class="text-[9px] uppercase tracking-widest text-gray-600 mt-0.5">Infrastrutture e Sicurezza Stradale Nazionale</span>
+            </div>
+            <div class="text-center md:text-right font-mono space-y-1">
+                <div>© 2026 Car Multiservizi S.p.A. | P.IVA 01234567890 | Capitale Sociale i.v. € 5.000.000</div>
+                <div class="text-gray-600">Sito conforme alle direttive di Accessibilità AA e standard per Appalti Pubblici Nazionali.</div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inizializzazione icone Lucide
+        lucide.createIcons();
+
+        // Controllo Navbar su Scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.classList.add('py-3', 'shadow-2xl', 'bg-brand-black/90');
+                header.classList.remove('py-4', 'bg-brand-black/60');
+            } else {
+                header.classList.add('py-4', 'bg-brand-black/60');
+                header.classList.remove('py-3', 'shadow-2xl', 'bg-brand-black/90');
+            }
+        });
+
+        // Simulatore di Loading Screen ad Alta Tecnologia
+        document.addEventListener('DOMContentLoaded', () => {
+            let progress = 0;
+            const bar = document.getElementById('preloader-bar');
+            const text = document.getElementById('preloader-text');
+            const preloader = document.getElementById('preloader');
+
+            const interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if (progress > 100) progress = 100;
+                
+                bar.style.w = `${progress}%`;
+                text.innerText = `INITIALIZING SYSTEMS... ${progress}%`;
+
+                if (progress === 100) {
+                    clearInterval(interval);
+                    gsap.to(preloader, {
+                        opacity: 0,
+                        duration: 0.8,
+                        delay: 0.2,
+                        onComplete: () => {
+                            preloader.style.display = 'none';
+                            initScrollAnimations();
+                        }
+                    });
+                }
+            }, 60);
+        });
+
+        // Inizializzazione Animazioni Avanzate con GSAP e ScrollTrigger
+        function initScrollAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+
+            // Counter Esecuzione Dinamica
+            const counters = document.querySelectorAll('.counter');
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                gsap.fromTo(counter, { innerText: 0 }, {
+                    innerText: target,
+                    duration: 2.5,
+                    ease: "power3.out",
+                    scrollTrigger: {
+                        trigger: counter,
+                        start: "top 90%",
+                        toggleActions: "play none none none"
+                    },
+                    snap: { innerText: 1 },
+                    onUpdate: function() {
+                        counter.innerHTML = Math.ceil(this.targets()[0].innerText);
+                    }
+                });
+            });
+
+            // Animazione Dissolvenza e Parallasse per i blocchi Magazine dei Servizi
+            const panels = document.querySelectorAll('.service-panel');
+            panels.forEach((panel) => {
+                gsap.from(panel.querySelector('h3, p, ul, a'), {
+                    opacity: 0,
+                    y: 50,
+                    duration: 1,
+                    stagger: 0.2,
+                    scrollTrigger: {
+                        trigger: panel,
+                        start: "top 70%",
+                        toggleActions: "play none none none"
+                    }
+                });
+            });
+
+            // Timeline Steps Reveal sequenziale durante lo scroll
+            gsap.from('.timeline-step', {
+                opacity: 0,
+                y: 30,
+                duration: 0.8,
+                stagger: 0.15,
+                scrollTrigger: {
+                    trigger: '.timeline-step',
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                }
+            });
+        }
+    </script>
+</body>
+</html>
